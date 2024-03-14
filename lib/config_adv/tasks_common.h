@@ -91,7 +91,7 @@
  * @brief NVS Models config
  *
  */
-#define DEFAULT_MODEL (char *)"METEOR" // default model
+#define DEFAULT_MODEL (char *)"METEOR_Telhado" // default model
 
 #define WAKEUP_TOUCH_TRESHOLD (char *)"wakeupTreshold" // 900
                                                        // #wake up setpoint
