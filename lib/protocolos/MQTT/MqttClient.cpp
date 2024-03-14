@@ -1,6 +1,5 @@
 // MqttClient.cpp
 #include "MqttClient.hpp"
-#include "MqttOtaAct.hpp"
 
 namespace PROTOCOL
 {
@@ -113,7 +112,6 @@ namespace PROTOCOL
                         ESP_LOGW("COMMAND", "%s", received_data);
                         save_nvs_int8_var(UPDATE_STATUS, true);
                         ESP_LOGW("UPDATE_STATUS", "true");
-
                         save_nvs_string_var(OTA_URL, received_data);
                     }
                     // Lembre-se de liberar a memória alocada quando não precisar mais
