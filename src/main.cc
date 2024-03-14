@@ -13,23 +13,35 @@ extern "C"
 
 void app_main()
 {
-    create_sleep_timer(30);
-
     TOUCH::TouchPad touch_button(TOUCH_PAD_NUM0, read_nvs_uint32_var(WAKEUP_TOUCH_TRESHOLD));
+
+    create_sleep_timer(40);
+
+    if (read_nvs_int8_var(UPDATE_STATUS))
+    {
+        ESP_LOGW("OTA-STATUS", "UpdateStatus true");
+        otaInit();
+        set_rgb_led_interface(20, 100, 100);
+        while (true)
+        {
+            vTaskDelay(5 * PORT_TICK_PERIOD_SECONDS);
+        }
+    }
     init_i2c();
 
     switch (wakeup_cause())
     {
     case WAKEUP_TOUCHPAD:
         ESP_LOGW("ESP-WAKE-UP", "FROM Touch");
-        esp_init_from_touch();
+        esp_init_from_touch(&touch_button);
+
         create_sleep_timer(0);
 
         break;
     case WAKEUP_TIMER:
         ESP_LOGW("ESP-WAKE-UP", "FROM TIMER");
         esp_init_from_timer();
-        // esp_init_from_touch();
+
         create_sleep_timer(0);
         break;
     case WAKEUP_BT:
@@ -71,9 +83,9 @@ void app_main()
     case WAKEUP_UNDEFINED:
         ESP_LOGW("ESP-WAKE-UP", "WAKEUP_UNDEFINED");
         save_nvs_string_var(MODEL, DEFAULT_MODEL);
-        save_nvs_u32_var(WAKEUP_TOUCH_TRESHOLD, 1100);
+        save_nvs_u32_var(WAKEUP_TOUCH_TRESHOLD, 1000);
         save_nvs_u32_var(TIME_TO_WAKE_UP, 30);
-        printf("%d\n", touch_button.touch_read());
+        save_nvs_int8_var(UPDATE_STATUS, false);
         create_sleep_timer(0);
         break;
 
@@ -81,6 +93,7 @@ void app_main()
         ESP_LOGW("ESP-WAKE-UP", "RESET ERROR %d", wakeup_cause());
 
         create_sleep_timer(0);
+
         break;
     }
     while (true)

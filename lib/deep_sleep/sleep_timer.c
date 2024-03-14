@@ -23,9 +23,14 @@
 TaskHandle_t task_sleep_timer_handle = NULL;
 
 int tSleep_timer_time_s = 30;
+bool is_counting = false;
 
 void create_sleep_timer(int sleep_timer_time_s)
 {
+    if (is_counting == true)
+    {
+        delete_sleep_timer();
+    }
     tSleep_timer_time_s = sleep_timer_time_s;
 
     esp_sleep_pd_config(ESP_PD_DOMAIN_RTC_PERIPH, ESP_PD_OPTION_AUTO);
@@ -42,6 +47,7 @@ void create_sleep_timer(int sleep_timer_time_s)
 
 void vTask_sleep_timer(void *pvParameters)
 {
+    is_counting = true;
     while (true)
     {
         vTaskDelay(tSleep_timer_time_s * 1000 / portTICK_PERIOD_MS);
@@ -51,10 +57,17 @@ void vTask_sleep_timer(void *pvParameters)
 
 void delete_sleep_timer(void)
 {
-    vTaskDelete(task_sleep_timer_handle);
-    printf("apagou timer de %d segundos \n", tSleep_timer_time_s);
+    if (is_counting == true)
+    {
+        is_counting = false;
+        vTaskDelete(task_sleep_timer_handle);
+        printf("apagou timer de %d segundos \n", tSleep_timer_time_s);
+    }
+    else
+    {
+        ESP_LOGI("SLEEP_TIMER", "is not counting");
+    }
 }
-
 void init_sleep(void)
 {
     blink_color_stop();

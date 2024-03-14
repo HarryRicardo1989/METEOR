@@ -1,5 +1,6 @@
 // MqttClient.cpp
 #include "MqttClient.hpp"
+#include "MqttOtaAct.hpp"
 
 namespace PROTOCOL
 {
@@ -53,7 +54,7 @@ namespace PROTOCOL
     void MqttClient::subscribe(const char *topic)
     {
         ESP_LOGI("MqttClient", "try to subscribe");
-        esp_mqtt_client_subscribe(client, topic, 0);
+        esp_mqtt_client_subscribe(client, topic, 2);
         ESP_LOGI("SUBSCRIBE", "%s", topic);
     }
 
@@ -105,11 +106,15 @@ namespace PROTOCOL
                     if (strcmp(received_data, "vairfactory") == 0)
                     {
                         ESP_LOGW("FACTORY", "Factory Default");
-                        
                     }
                     else
                     {
+
                         ESP_LOGW("COMMAND", "%s", received_data);
+                        save_nvs_int8_var(UPDATE_STATUS, true);
+                        ESP_LOGW("UPDATE_STATUS", "true");
+
+                        save_nvs_string_var(OTA_URL, received_data);
                     }
                     // Lembre-se de liberar a memória alocada quando não precisar mais
                     free(received_data);
@@ -118,8 +123,6 @@ namespace PROTOCOL
         }
 
         break;
-
-            // Adicione outros casos de tratamento de eventos conforme necessário
 
         default:
             break;

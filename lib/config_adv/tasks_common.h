@@ -70,6 +70,8 @@
 #define HUMIDITY (char *)"humidity"
 #define PRESSURE (char *)"pressure"
 #define DEWPOINT (char *)"dewPoint"
+#define UPDATE_STATUS (char *)"updateStatus"
+#define OTA_URL (char *)"otaUrl"
 
 /**
  * @brief AES Crypto config
@@ -89,12 +91,10 @@
  * @brief NVS Models config
  *
  */
-#define DEFAULT_MODEL (char *)"PCD_METEOR" // default model
+#define DEFAULT_MODEL (char *)"METEOR" // default model
 
 #define WAKEUP_TOUCH_TRESHOLD (char *)"wakeupTreshold" // 900
-// #wake up setpoint
-
-#define TOUCH_PAD_THRESHOLD 1400 // 900
+                                                       // #wake up setpoint
 
 /**
  * @brief precisa gravar todos os NVS antes de rodar

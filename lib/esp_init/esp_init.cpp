@@ -6,9 +6,10 @@ WiFiManager *wifi = nullptr;
 PROTOCOL::MqttInit *mqtt_initialize = nullptr;
 PROTOCOL::I2c *i2c = nullptr;
 OLED *oledDisplay = nullptr;
-void esp_init_from_touch()
+TOUCH::TouchPad *touch_button = nullptr;
+void esp_init_from_touch(TOUCH::TouchPad *touch)
 {
-
+    touch_button = touch;
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
     {
@@ -69,7 +70,6 @@ void init_i2c()
 
 void esp_init_from_timer()
 {
-
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
     {
@@ -113,6 +113,8 @@ void esp_init_from_timer()
         esp_ip4_addr_t ip = wifi->getIP();
         ESP_LOGW("WIFI-STATUS", "Connected at IP: %d.%d.%d.%d", IP2STR(&ip));
         mqtt_initialize->connect();
+        mqtt_initialize->subscribe();
+        vTaskDelay(1 * PORT_TICK_PERIOD_SECONDS);
         mqtt_initialize->publish_full_data();
     }
 }
@@ -259,5 +261,26 @@ void display_meteor(float temperature, float pressure, int humidity, float i2cDe
     oledDisplay->updateDisplay();
 
     vTaskDelay(5 * PORT_TICK_PERIOD_SECONDS);
+
+    while (touch_button->touch_read() <= read_nvs_uint32_var(WAKEUP_TOUCH_TRESHOLD))
+    {
+        vTaskDelay(1 * PORT_TICK_PERIOD_SECONDS);
+    }
     oledDisplay->displaySleep();
+}
+
+void otaInit()
+{
+    wifi = new WiFiManager();
+    tryConnectToWiFi();
+    create_sleep_timer(120);
+    if (wifi->isConnected())
+    {
+        esp_ip4_addr_t ip = wifi->getIP();
+        ESP_LOGW("WIFI-STATUS", "Connected at IP: %d.%d.%d.%d", IP2STR(&ip));
+        OtaUpdate otaUpdater;
+        save_nvs_int8_var(UPDATE_STATUS, false);
+        ESP_LOGW("UPDATE_STATUS", "false");
+        otaUpdater.start(read_nvs_string_var(OTA_URL));
+    }
 }

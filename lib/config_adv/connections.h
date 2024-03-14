@@ -23,7 +23,7 @@
 #define MQTT_TOPIC (char *)"pcd-meteor"
 #define MQTT_TOPIC_TO_SITE (char *)"pcd-meteor/site"
 
-#define MQTT_SUBTOPIC_COMMAND (char *)"/command"
+#define MQTT_SUBTOPIC_OTA (char *)"/OTA"
 #define MQTT_SUBTOPIC_STATUS (char *)"/status"
 #define MQTT_SUBTOPIC_BATTERY (char *)"/battery"
 #define MQTT_SUBTOPIC_INFO (char *)"/info"

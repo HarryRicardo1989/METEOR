@@ -5,6 +5,8 @@
 #include "mqtt5_client.h"
 #include "esp_log.h"
 #include "sleep_timer.h"
+#include "tasks_common.h"
+
 #include "connections.h"
 #include "rw_data.h"
 
