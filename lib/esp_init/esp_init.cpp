@@ -35,8 +35,6 @@ void esp_init_from_touch(TOUCH::TouchPad *touch)
     float i2cPressure;
     int i2cHumidity;
     float i2cDewPoint;
-    // int i2cId;
-    // i2cId = bme280i2c.GetDeviceID();
     bme280i2c.GetAllResults(&i2cTemperature, &i2cHumidity, &i2cPressure, &i2cDewPoint);
     int bat_level = read_nvs_int8_var(BATTERY_PERCENT_VALUE);
     uint32_t bat_mv = read_nvs_uint32_var(BATTERY_VALUE);
