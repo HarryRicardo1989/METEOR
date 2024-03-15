@@ -22,6 +22,11 @@ void init()
 
         deisolate_gpio();
     }
+    int updateStatus = read_nvs_int8_var(UPDATE_STATUS);
+    if (updateStatus != 0 && updateStatus != 1)
+    {
+        save_nvs_int8_var(UPDATE_STATUS, 0);
+    }
 }
 void esp_init_from_touch(TOUCH::TouchPad *touch)
 {
