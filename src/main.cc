@@ -83,8 +83,8 @@ void app_main()
     case WAKEUP_UNDEFINED:
         ESP_LOGW("ESP-WAKE-UP", "WAKEUP_UNDEFINED");
         save_nvs_string_var(MODEL, DEFAULT_MODEL);
-        save_nvs_u32_var(WAKEUP_TOUCH_TRESHOLD, 1200);
-        save_nvs_u32_var(TIME_TO_WAKE_UP, 30);
+        save_nvs_u32_var(WAKEUP_TOUCH_TRESHOLD, 1250);
+        save_nvs_u32_var(TIME_TO_WAKE_UP, 40);
         save_nvs_int8_var(UPDATE_STATUS, false);
         create_sleep_timer(0);
         break;

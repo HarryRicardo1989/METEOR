@@ -22,7 +22,7 @@ void esp_init_from_touch(TOUCH::TouchPad *touch)
         deisolate_gpio();
     }
     battery_things();
-
+    uint32_t touch_value = touch_button->touch_read();
     blink_led_custom(0, 0, 100, 20, 50, 3);
 
     generate_client_ID();
@@ -39,7 +39,7 @@ void esp_init_from_touch(TOUCH::TouchPad *touch)
     int bat_level = read_nvs_int8_var(BATTERY_PERCENT_VALUE);
     uint32_t bat_mv = read_nvs_uint32_var(BATTERY_VALUE);
 
-    display_meteor(i2cTemperature, i2cPressure, i2cHumidity, i2cDewPoint, bat_level, bat_mv);
+    display_meteor(i2cTemperature, i2cPressure, i2cHumidity, i2cDewPoint, bat_level, bat_mv, touch_value);
 
     // scanI2CDevices(SDA_PIN, SCL_PIN);
 }
@@ -111,9 +111,14 @@ void esp_init_from_timer()
         esp_ip4_addr_t ip = wifi->getIP();
         ESP_LOGW("WIFI-STATUS", "Connected at IP: %d.%d.%d.%d", IP2STR(&ip));
         mqtt_initialize->connect();
+        blink_led_custom(0, 100, 0, 20, 50, 1);
+
         mqtt_initialize->subscribe();
+        blink_led_custom(0, 100, 100, 20, 50, 2);
+
         vTaskDelay(1 * PORT_TICK_PERIOD_SECONDS);
         mqtt_initialize->publish_full_data();
+        blink_led_custom(100, 100, 100, 20, 50, 3);
     }
 }
 void tryConnectToWiFi()
@@ -229,7 +234,7 @@ void battery_things()
     ESP_LOGI("BATTERY", "%ld", bat_mv);
 }
 
-void display_meteor(float temperature, float pressure, int humidity, float i2cDewPoint, int battery_level, u_int32_t battery_voltage)
+void display_meteor(float temperature, float pressure, int humidity, float i2cDewPoint, int battery_level, u_int32_t battery_voltage, uint32_t touch_value)
 {
     char buffer[30]; // Buffer para armazenar o texto formatado
 
@@ -252,9 +257,10 @@ void display_meteor(float temperature, float pressure, int humidity, float i2cDe
 
     sprintf(buffer, "DewP: %.2fC", i2cDewPoint); // Formata o ponto de orvalho
     oledDisplay->displayTextBuffered(buffer, 0, 40);
-
-    sprintf(buffer, "Bat: %ldmV", battery_voltage); // Formata a tensao da bateria
-    oledDisplay->displayTextBuffered(buffer, 0, 56);
+    sprintf(buffer, "Touch: %ldADC", touch_value); // Formata o ponto de orvalho
+    oledDisplay->displayTextBuffered(buffer, 10, 48);
+    sprintf(buffer, "Bat: %ldmV ", battery_voltage); // Formata a tensao da bateria
+    oledDisplay->displayTextBuffered(buffer, 10, 56);
 
     oledDisplay->updateDisplay();
 
@@ -277,8 +283,7 @@ void otaInit()
         esp_ip4_addr_t ip = wifi->getIP();
         ESP_LOGW("WIFI-STATUS", "Connected at IP: %d.%d.%d.%d", IP2STR(&ip));
         OtaUpdate otaUpdater;
-        save_nvs_int8_var(UPDATE_STATUS, false);
-        ESP_LOGW("UPDATE_STATUS", "false");
+
         otaUpdater.start(read_nvs_string_var(OTA_URL));
     }
 }
