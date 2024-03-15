@@ -15,38 +15,36 @@ namespace BATTERY
             battery_level = kf_battery.filter((adc.GetVoltage() * (R1 + R2) / R2) * V_CORRECTION);
             vTaskDelay(50 / configTICK_RATE_HZ);
         }
+        // battery_level /= count;
+        //  ESP_LOGI("BAT", "ADC-RAW: %d", adc.GetRaw());
+        //  ESP_LOGI("BAT", "ADC-GetVoltage: %d", adc.GetVoltage());
+        //  battery_map = (battery_level - map_in_min) / (float)(map_in_max - map_in_min) * (map_out_max - map_out_min) + map_out_min;
+        //  ESP_LOGI("BAT", "BAT_ V_div: %d", battery_level);
+        //   ESP_LOGI("BAT", "BAT multip: %d", static_cast<int>(round(battery_level * 1.33)));
+        //   ESP_LOGI("BAT", "BAT_ Voltage: %d", (int)floor(battery_map));
 
-        ESP_LOGW("BAT", "ADC-RAW: %d", adc.GetRaw());
-        ESP_LOGW("BAT", "ADC-GetVoltage: %d", adc.GetVoltage());
-        // printf("adcFiltrado: %d\n ", battery_level);
-        //  printf("adc raw: %d\n ", adc.GetRaw());
-        battery_map = (battery_level - map_in_min) / (float)(map_in_max - map_in_min) * (map_out_max - map_out_min) + map_out_min;
-        ESP_LOGW("BAT", "BAT_ V_div: %d", battery_level);
-        // ESP_LOGW("BAT", "BAT multip: %d", static_cast<int>(round(battery_level * 1.33)));
-        // ESP_LOGW("BAT", "BAT_ Voltage: %d", (int)floor(battery_map));
-
-        if (battery_map >= 4300)
+        if (battery_level >= 4200)
         {
-            battery_map = 4300;
+            battery_level = 4200;
         }
 
-        // printf("Vbat: %d\n ", (int)floor(battery_map));
         return (int)floor(battery_level);
     }
 
     int BatteryStatus::battery_percent(uint16_t voltage_mV)
     {
         const std::vector<std::pair<uint16_t, int>> voltageToPercentage = {
-            {4000, 100},
-            {3700, 90},
-            {3600, 80},
-            {3530, 70},
-            {3450, 60},
-            {3350, 50},
-            {3250, 40},
-            {3150, 30},
-            {3000, 20},
-            {2800, 10},
+            {4200, 100},
+            {3900, 90},
+            {3750, 80},
+            {3620, 70},
+            {3500, 60},
+            {3400, 50},
+            {3300, 40},
+            {3200, 30},
+            {3110, 20},
+            {3050, 10},
+            {3000, 00},
         };
 
         if (voltage_mV >= voltageToPercentage[0].first)
