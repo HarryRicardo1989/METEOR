@@ -20,7 +20,7 @@
  * 3ºnumber  MAINTENANCE release number (bugfixes only)
  * 4ºnumber  BUILD NUMBER (Hardware release)
  */
-#define FIRMWARE_VERSION (char *)"0.0.1"
+#define FIRMWARE_VERSION (char *)"0.1.2"
 #define MANUFACTORY (char *)"RICARDOPASCHOALI"
 #define MAC_ADDRESS (char *)"mac"
 

@@ -4,6 +4,7 @@
 #include "esp_https_ota.h"
 #include "sleep_timer.h"
 #include "blink_color.h"
+#include "rw_data.h"
 
 static const char *TAG = "OtaUpdate";
 
@@ -14,7 +15,7 @@ OtaUpdate::OtaUpdate()
 
 esp_err_t OtaUpdate::start(const char *ota_url)
 {
-
+    set_rgb_led_interface(50, 50, 50);
     esp_http_client_config_t config = {};
     config.url = ota_url;
     config.event_handler = http_event_handler;
@@ -28,6 +29,9 @@ esp_err_t OtaUpdate::start(const char *ota_url)
     if (ret == ESP_OK)
     {
         ESP_LOGI(TAG, "OTA Update succeeded");
+        save_nvs_int8_var(UPDATE_STATUS, false);
+        set_rgb_led_interface(0, 500, 0);
+        ESP_LOGW("UPDATE_STATUS", "false");
         esp_restart();
     }
     else
