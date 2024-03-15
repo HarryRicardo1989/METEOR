@@ -119,8 +119,8 @@ void esp_init_from_timer()
 }
 void tryConnectToWiFi()
 {
-    const char *ssids[] = {SSID2, SSID3, SSID4, SSID1, SSID0};
-    const char *passwords[] = {PASSWORD2, PASSWORD3, PASSWORD4, PASSWORD1, PASSWORD0};
+    const char *ssids[] = {SSID2, SSID3, SSID0};
+    const char *passwords[] = {PASSWORD2, PASSWORD3, PASSWORD0};
 
     for (int i = 0; i < 5; i++)
     {
