@@ -29,6 +29,7 @@
 #include "battery.hpp"
 #include "OTA/OtaUpdate.hpp"
 
+void init();
 void esp_init_from_touch(TOUCH::TouchPad *touch);
 void esp_init_from_timer();
 void generate_client_ID();
@@ -38,5 +39,5 @@ char *convert_float_to_string(float value);
 void battery_things();
 void init_i2c();
 void tryConnectToWiFi();
-void display_meteor(float temperature, float pressure, int humidity, float i2cDewPoint, int battery_level, u_int32_t battery_voltage);
+void display_meteor(float temperature, float pressure, int humidity, float i2cDewPoint, int battery_level, u_int32_t battery_voltage, uint32_t touch_value);
 void otaInit();
