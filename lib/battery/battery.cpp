@@ -23,11 +23,6 @@ namespace BATTERY
         //   ESP_LOGI("BAT", "BAT multip: %d", static_cast<int>(round(battery_level * 1.33)));
         //   ESP_LOGI("BAT", "BAT_ Voltage: %d", (int)floor(battery_map));
 
-        if (battery_level >= 4200)
-        {
-            battery_level = 4200;
-        }
-
         return (int)floor(battery_level);
     }
 
