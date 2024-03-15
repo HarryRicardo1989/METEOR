@@ -7,9 +7,8 @@ PROTOCOL::MqttInit *mqtt_initialize = nullptr;
 PROTOCOL::I2c *i2c = nullptr;
 OLED *oledDisplay = nullptr;
 TOUCH::TouchPad *touch_button = nullptr;
-void esp_init_from_touch(TOUCH::TouchPad *touch)
+void init()
 {
-    touch_button = touch;
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
     {
@@ -19,8 +18,15 @@ void esp_init_from_touch(TOUCH::TouchPad *touch)
     ESP_ERROR_CHECK(ret);
     if (esp_reset_reason() == ESP_RST_DEEPSLEEP)
     {
+        printf("\n\nACORDEI\n\n");
+
         deisolate_gpio();
     }
+}
+void esp_init_from_touch(TOUCH::TouchPad *touch)
+{
+    touch_button = touch;
+
     battery_things();
     uint32_t touch_value = touch_button->touch_read();
     blink_led_custom(0, 0, 100, 20, 50, 3);
@@ -68,19 +74,7 @@ void init_i2c()
 
 void esp_init_from_timer()
 {
-    esp_err_t ret = nvs_flash_init();
-    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
-    {
-        ESP_ERROR_CHECK(nvs_flash_erase());
-        ret = nvs_flash_init();
-    }
-    ESP_ERROR_CHECK(ret);
-    if (esp_reset_reason() == ESP_RST_DEEPSLEEP)
-    {
-        printf("\n\nACORDEI\n\n");
 
-        deisolate_gpio();
-    }
     battery_things();
     blink_led_custom(0, 0, 100, 20, 50, 2);
 
@@ -275,15 +269,31 @@ void display_meteor(float temperature, float pressure, int humidity, float i2cDe
 
 void otaInit()
 {
+    char buffer[30];
     wifi = new WiFiManager();
     tryConnectToWiFi();
-    create_sleep_timer(120);
+    create_sleep_timer(300);
     if (wifi->isConnected())
     {
         esp_ip4_addr_t ip = wifi->getIP();
         ESP_LOGW("WIFI-STATUS", "Connected at IP: %d.%d.%d.%d", IP2STR(&ip));
+        oledDisplay->init();
+        oledDisplay->displayWakeUp();
+        oledDisplay->initScreenBuffer();
+
+        sprintf(buffer, "Updating!"); // Formata a umidade
+        oledDisplay->displayTextBuffered(buffer, 20, 24);
         OtaUpdate otaUpdater;
+        oledDisplay->updateDisplay();
 
         otaUpdater.start(read_nvs_string_var(OTA_URL));
+        sprintf(buffer, "Update success!"); // Formata a umidade
+        oledDisplay->displayTextBuffered(buffer, 10, 24);
+        oledDisplay->updateDisplay();
+        vTaskDelay(1 * PORT_TICK_PERIOD_SECONDS);
+
+        oledDisplay->displayClear();
+        oledDisplay->displaySleep();
+        esp_restart();
     }
 }
