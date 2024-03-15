@@ -7,9 +7,9 @@ PROTOCOL::MqttInit *mqtt_initialize = nullptr;
 PROTOCOL::I2c *i2c = nullptr;
 OLED *oledDisplay = nullptr;
 TOUCH::TouchPad *touch_button = nullptr;
-void esp_init_from_touch(TOUCH::TouchPad *touch)
+
+void init()
 {
-    touch_button = touch;
     esp_err_t ret = nvs_flash_init();
     if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
     {
@@ -19,8 +19,15 @@ void esp_init_from_touch(TOUCH::TouchPad *touch)
     ESP_ERROR_CHECK(ret);
     if (esp_reset_reason() == ESP_RST_DEEPSLEEP)
     {
+        printf("\n\nACORDEI\n\n");
+
         deisolate_gpio();
     }
+}
+
+void esp_init_from_touch(TOUCH::TouchPad *touch)
+{
+
     battery_things();
 
     uint32_t touch_value = touch_button->touch_read();
@@ -71,19 +78,7 @@ void init_i2c()
 
 void esp_init_from_timer()
 {
-    esp_err_t ret = nvs_flash_init();
-    if (ret == ESP_ERR_NVS_NO_FREE_PAGES || ret == ESP_ERR_NVS_NEW_VERSION_FOUND)
-    {
-        ESP_ERROR_CHECK(nvs_flash_erase());
-        ret = nvs_flash_init();
-    }
-    ESP_ERROR_CHECK(ret);
-    if (esp_reset_reason() == ESP_RST_DEEPSLEEP)
-    {
-        printf("\n\nACORDEI\n\n");
 
-        deisolate_gpio();
-    }
     battery_things();
     blink_led_custom(0, 0, 100, 20, 50, 2);
 
@@ -280,12 +275,13 @@ void otaInit()
 {
     wifi = new WiFiManager();
     tryConnectToWiFi();
-    create_sleep_timer(120);
+    create_sleep_timer(300);
     if (wifi->isConnected())
     {
         esp_ip4_addr_t ip = wifi->getIP();
         ESP_LOGW("WIFI-STATUS", "Connected at IP: %d.%d.%d.%d", IP2STR(&ip));
         OtaUpdate otaUpdater;
         otaUpdater.start(read_nvs_string_var(OTA_URL));
+        esp_restart();
     }
 }

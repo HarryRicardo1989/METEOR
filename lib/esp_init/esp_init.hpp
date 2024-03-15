@@ -29,6 +29,7 @@
 #include "battery.hpp"
 #include "OTA/OtaUpdate.hpp"
 
+void init();
 void esp_init_from_touch(TOUCH::TouchPad *touch);
 void esp_init_from_timer();
 void generate_client_ID();

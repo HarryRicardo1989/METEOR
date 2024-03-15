@@ -12,7 +12,6 @@
 
 namespace PROTOCOL
 {
-#define TAG "MQTT_EVENT"
 
     class MqttClient
     {
@@ -32,6 +31,7 @@ namespace PROTOCOL
         void subscribe(const char *topic);
         void unsubscribe(const char *topic);
         void publish(const char *topic, char *data, int qos, int retain);
+        void concat_string(char *resultado, char *str1, char *str2);
 
     private:
         MqttClient(); // Construtor privado
