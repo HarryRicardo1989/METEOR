@@ -46,11 +46,12 @@ void esp_init_from_touch(TOUCH::TouchPad *touch)
     float i2cPressure;
     int i2cHumidity;
     float i2cDewPoint;
-    bme280i2c.GetAllResults(&i2cTemperature, &i2cHumidity, &i2cPressure, &i2cDewPoint);
+    float altitude;
+    bme280i2c.GetAllResults(&i2cTemperature, &i2cHumidity, &i2cPressure, &i2cDewPoint, &altitude);
     int bat_level = read_nvs_int8_var(BATTERY_PERCENT_VALUE);
     uint32_t bat_mv = read_nvs_uint32_var(BATTERY_VALUE);
 
-    display_meteor(i2cTemperature, i2cPressure, i2cHumidity, i2cDewPoint, bat_level, bat_mv, touch_value);
+    display_meteor(i2cTemperature, i2cPressure, i2cHumidity, i2cDewPoint, bat_level, bat_mv, touch_value, altitude);
 
     // scanI2CDevices(SDA_PIN, SCL_PIN);
 }
@@ -93,13 +94,15 @@ void esp_init_from_timer()
     float i2cPressure;
     float i2cDewPoint;
     int i2cHumidity;
+    float i2cAltitude;
     // int i2cId;
     // i2cId = bme280i2c.GetDeviceID();
-    bme280i2c.GetAllResults(&i2cTemperature, &i2cHumidity, &i2cPressure, &i2cDewPoint);
+    bme280i2c.GetAllResults(&i2cTemperature, &i2cHumidity, &i2cPressure, &i2cDewPoint, &i2cAltitude);
     save_nvs_string_var(TEMPERATURE, convert_float_to_string(i2cTemperature));
     save_nvs_string_var(HUMIDITY, convert_value_to_string(i2cHumidity));
     save_nvs_string_var(PRESSURE, convert_float_to_string(i2cPressure));
     save_nvs_string_var(DEWPOINT, convert_float_to_string(i2cDewPoint));
+    save_nvs_string_var(ALTITUDE, convert_float_to_string(i2cAltitude));
     wifi = new WiFiManager();
     mqtt_initialize = new PROTOCOL::MqttInit();
 
@@ -122,8 +125,8 @@ void esp_init_from_timer()
 }
 void tryConnectToWiFi()
 {
-    const char *ssids[] = {SSID2, SSID3, SSID4, SSID1, SSID0};
-    const char *passwords[] = {PASSWORD2, PASSWORD3, PASSWORD4, PASSWORD1, PASSWORD0};
+    const char *ssids[] = {SSID5, SSID3, SSID4, SSID1, SSID0};
+    const char *passwords[] = {PASSWORD5, PASSWORD3, PASSWORD4, PASSWORD1, PASSWORD0};
 
     for (int i = 0; i < 5; i++)
     {
@@ -233,7 +236,7 @@ void battery_things()
     ESP_LOGI("BATTERY", "%ld", bat_mv);
 }
 
-void display_meteor(float temperature, float pressure, int humidity, float i2cDewPoint, int battery_level, u_int32_t battery_voltage, uint32_t touch_value)
+void display_meteor(float temperature, float pressure, int humidity, float i2cDewPoint, int battery_level, u_int32_t battery_voltage, uint32_t touch_value, float altitude)
 {
     char buffer[30]; // Buffer para armazenar o texto formatado
 
@@ -256,8 +259,8 @@ void display_meteor(float temperature, float pressure, int humidity, float i2cDe
 
     sprintf(buffer, "DewP: %.2fC", i2cDewPoint); // Formata o ponto de orvalho
     oledDisplay->displayTextBuffered(buffer, 0, 40);
-    sprintf(buffer, "Touch: %ldADC", touch_value); // Formata o ponto de orvalho
-    oledDisplay->displayTextBuffered(buffer, 10, 48);
+    sprintf(buffer, "Alt: %.2fm", altitude); // Formata o ponto de altitude
+    oledDisplay->displayTextBuffered(buffer, 0, 48);
     sprintf(buffer, "Bat: %ldmV ", battery_voltage); // Formata a tensao da bateria
     oledDisplay->displayTextBuffered(buffer, 10, 56);
 

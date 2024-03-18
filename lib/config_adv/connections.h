@@ -5,11 +5,13 @@
 #define SSID2 "WECLIXWIFI"
 #define SSID3 "Automacao"
 #define SSID4 "Weclix"
+#define SSID5 "Cheline - vivo"
 #define PASSWORD0 "AAB_DEV1"
 #define PASSWORD1 "meunomeInteiroTudojunto"
 #define PASSWORD2 "meunomeInteiroTudojunto"
 #define PASSWORD3 "meunomeinteirotudojunto"
 #define PASSWORD4 "meunomeinteirotudojunto"
+#define PASSWORD5 "sumiu#2825"
 
 #define MQTT_URI "20.127.210.50"
 #define MQTT_PORT 1883
