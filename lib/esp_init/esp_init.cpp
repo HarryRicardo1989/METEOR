@@ -46,11 +46,12 @@ void esp_init_from_touch(TOUCH::TouchPad *touch)
     bme280i2c.SetConfigFilter(1);
     float i2cTemperature;
     float i2cPressure;
-    int i2cHumidity;
     float i2cDewPoint;
+    int i2cHumidity;
+    float i2cAltitude;
     // int i2cId;
     // i2cId = bme280i2c.GetDeviceID();
-    bme280i2c.GetAllResults(&i2cTemperature, &i2cHumidity, &i2cPressure, &i2cDewPoint);
+    bme280i2c.GetAllResults(&i2cTemperature, &i2cHumidity, &i2cPressure, &i2cDewPoint, &i2cAltitude);
     int bat_level = read_nvs_int8_var(BATTERY_PERCENT_VALUE);
     uint32_t bat_mv = read_nvs_uint32_var(BATTERY_VALUE);
 
@@ -97,17 +98,17 @@ void esp_init_from_timer()
     float i2cPressure;
     float i2cDewPoint;
     int i2cHumidity;
+    float i2cAltitude;
     // int i2cId;
     // i2cId = bme280i2c.GetDeviceID();
-    bme280i2c.GetAllResults(&i2cTemperature, &i2cHumidity, &i2cPressure, &i2cDewPoint);
+    bme280i2c.GetAllResults(&i2cTemperature, &i2cHumidity, &i2cPressure, &i2cDewPoint, &i2cAltitude);
     save_nvs_string_var(TEMPERATURE, convert_float_to_string(i2cTemperature));
     save_nvs_string_var(HUMIDITY, convert_value_to_string(i2cHumidity));
     save_nvs_string_var(PRESSURE, convert_float_to_string(i2cPressure));
     save_nvs_string_var(DEWPOINT, convert_float_to_string(i2cDewPoint));
+    save_nvs_string_var(ALTITUDE, convert_float_to_string(i2cAltitude));
     wifi = new WiFiManager();
     mqtt_initialize = new PROTOCOL::MqttInit();
-
-    tryConnectToWiFi();
 
     if (wifi->isConnected())
     {
