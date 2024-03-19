@@ -1,0 +1,33 @@
+name: Sync Files Across Branches
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'METEOR/lib/protocolos/OTA/OtaUpdate.cpp'
+
+jobs:
+  sync-files:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Git
+        run: |
+          git config --global user.email "ricardo.paschoali@gmail.com"
+          git config --global user.name "Ricardo Paschoali"
+
+      - name: Sincronizar Arquivo
+        run: |
+          git fetch --all
+          for branch in $(git branch -r | grep origin | grep -v main | sed 's/origin\///'); do
+            git checkout ${branch}
+            git pull origin ${branch}
+            git checkout origin/main -- caminho/para/seu/arquivo_compartilhado.txt
+            git commit -m "Sincroniza arquivo_compartilhado.txt" || echo "Nenhuma mudança para commitar em ${branch}"
+            git push origin ${branch}
+          done
