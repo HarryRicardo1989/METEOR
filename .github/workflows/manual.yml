@@ -20,7 +20,7 @@ jobs:
       - name: Configurar Git
         run: |
           git config --global user.email "ricardo.paschoali@gmail.com"
-          git config --global user.name "Ricardo Paschoali"
+          git config --global user.name "HarryRicardo1989"
 
       - name: Sincronizar Pasta
         run: |
