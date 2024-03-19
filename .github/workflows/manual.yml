@@ -6,6 +6,8 @@ on:
       - mobile
     paths:
       - 'METEOR/lib/protocolos/OTA/**'
+      
+workflow_dispatch:
 
 jobs:
   sync-files:
