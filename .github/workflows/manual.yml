@@ -31,3 +31,4 @@ jobs:
             git commit -m "Sincroniza arquivo_compartilhado.txt" || echo "Nenhuma mudança para commitar em ${branch}"
             git push origin ${branch}
           done
+
