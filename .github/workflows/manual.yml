@@ -13,7 +13,11 @@ jobs:
     runs-on: self-hosted
     steps:
       - name: Checkout
+<<<<<<< HEAD
         uses: actions/checkout
+=======
+        uses: actions/checkout@v2
+>>>>>>> parent of 9d49c13 (Delete .github/workflows directory)
         with:
           fetch-depth: 0
 
