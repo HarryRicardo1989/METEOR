@@ -2,7 +2,7 @@ name: Sync Files Across Branches
 run-name: ${{ github.actor }} SyncFiles
 on: [push]
     branches:
-      - mobile
+      - main
     paths:
       - 'METEOR/lib/protocolos/OTA/**'
       
