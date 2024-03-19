@@ -9,7 +9,7 @@ static const char *TAG = "OtaUpdate";
 
 OtaUpdate::OtaUpdate()
 {
-    // Construtor vazio... testando workflow!
+    // Construtor vazio... testando workflow!!
 }
 
 esp_err_t OtaUpdate::start(const char *ota_url)
