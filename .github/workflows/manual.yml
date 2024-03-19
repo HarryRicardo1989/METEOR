@@ -3,7 +3,7 @@ name: Sync Files Across Branches
 on:
   push:
     branches:
-      - main
+      - mobile
     paths:
       - 'METEOR/lib/protocolos/OTA/**'
 
