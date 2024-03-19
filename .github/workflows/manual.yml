@@ -6,6 +6,8 @@ on:
       - main
     paths:
       - 'METEOR/lib/protocolos/OTA/OtaUpdate.cpp'
+      - 'METEOR/lib/protocolos/OTA/OtaUpdate.hpp'
+     
 
 jobs:
   sync-files:
