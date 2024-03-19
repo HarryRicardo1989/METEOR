@@ -18,8 +18,8 @@ jobs:
 
       - name: Configurar Git
         run: |
-          git config --global user.email "seuemail@example.com"
-          git config --global user.name "Seu Nome"
+          git config --global user.email "ricardo.paschoali@gmail.com"
+          git config --global user.name "Ricardo Paschoali"
 
       - name: Sincronizar Pasta
         run: |
