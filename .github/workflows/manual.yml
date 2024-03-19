@@ -1,12 +1,10 @@
 name: Sync Files Across Branches
 run-name: ${{ github.actor }} SyncFiles
-on: 
-  push:
+on: [push]
     branches:
       - main
     paths:
       - 'METEOR/lib/protocolos/OTA/**'
-
       
 workflow_dispatch:
 
