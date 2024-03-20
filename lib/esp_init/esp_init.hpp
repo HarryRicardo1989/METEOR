@@ -28,6 +28,10 @@
 #include "bme280/bme280_common.hpp"
 #include "battery.hpp"
 #include "OTA/OtaUpdate.hpp"
+#include <cstddef> // Para size_t
+
+extern const WiFiCredential wifiCredentials[];
+extern const size_t wifiCredentialsCount;
 
 void init();
 void esp_init_from_touch(TOUCH::TouchPad *touch);

@@ -1,15 +1,19 @@
 #pragma once
 
-#define SSID0 "AAB-DEV"
-#define SSID1 "ALCANSWIFI"
-#define SSID2 "WECLIXWIFI"
-#define SSID3 "Automacao"
-#define SSID4 "Weclix"
-#define PASSWORD0 "AAB_DEV1"
-#define PASSWORD1 "meunomeInteiroTudojunto"
-#define PASSWORD2 "meunomeInteiroTudojunto"
-#define PASSWORD3 "meunomeinteirotudojunto"
-#define PASSWORD4 "meunomeinteirotudojunto"
+struct WiFiCredential
+{
+    const char *ssid;
+    const char *password;
+};
+
+const WiFiCredential wifiCredentials[] = {
+    {"Automacao", "Meunomeinteirotudojunto"},
+    {"WECLIXWIFI", "meunomeInteiroTudojunto"},
+    {"Weclix", "meunomeinteirotudojunto"},
+    {"AAB-DEV", "AAB_DEV1"},
+    {"ALCANSWIFI", "meunomeInteiroTudojunto"},
+    {"Cheline - vivo", "sumiu#2825"},
+};
 
 #define MQTT_URI "20.127.210.50"
 #define MQTT_PORT 1883

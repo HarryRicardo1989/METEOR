@@ -29,12 +29,28 @@ esp_err_t OtaUpdate::start(const char *ota_url)
         ESP_LOGI("OtaUpdate", "OTA Update succeeded");
         save_nvs_int8_var(UPDATE_STATUS, false);
         ESP_LOGW("UPDATE_STATUS", "false");
+        validateAndUpdatePartition();
     }
     else
     {
-        ESP_LOGE("OtaUpdate", "OTA Update failed");
+        ESP_LOGE("OtaUpdate", "Falha na atualização OTA");
     }
     return ret;
+}
+void OtaUpdate::validateAndUpdatePartition()
+{
+    const esp_partition_t *configured = esp_ota_get_boot_partition();
+    const esp_partition_t *running = esp_ota_get_running_partition();
+
+    if (configured != running)
+    {
+        ESP_LOGW("OtaUpdate", "Configurado para boot de uma partição diferente da que está em execução");
+    }
+    else
+    {
+        ESP_LOGI("OtaUpdate", "Atualização bem-sucedida, configurando a nova partição como válida de boot");
+        esp_ota_mark_app_valid_cancel_rollback();
+    }
 }
 esp_err_t OtaUpdate::http_event_handler(esp_http_client_event_t *evt)
 {

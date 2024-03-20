@@ -124,6 +124,8 @@ namespace PROTOCOL
                         char *topic = new char[100];
                         instance->concat_string(topic, client_ID, MQTT_SUBTOPIC_OTA);
                         instance->publish(topic, (char *)"", 2, true);
+                        vTaskDelay(2 * PORT_TICK_PERIOD_SECONDS);
+                        esp_restart();
                     }
                     // Lembre-se de liberar a memória alocada quando não precisar mais
                     free(received_data);
