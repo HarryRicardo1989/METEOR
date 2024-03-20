@@ -66,11 +66,13 @@ namespace PROTOCOL
     {
         esp_mqtt_client_publish(client, topic, data, 0, qos, retain);
     }
+
     void MqttClient::concat_string(char *resultado, char *str1, char *str2)
     {
         strcpy(resultado, str1); // Copia a primeira string para o resultado
         strcat(resultado, str2); // Concatena a segunda string ao resultado
     }
+
     void MqttClient::mqtt_event_handler(void *handler_args, esp_event_base_t base, int32_t event_id, void *event_data)
     {
 
@@ -122,6 +124,8 @@ namespace PROTOCOL
                         char *topic = new char[100];
                         instance->concat_string(topic, client_ID, MQTT_SUBTOPIC_OTA);
                         instance->publish(topic, (char *)"", 2, true);
+                        vTaskDelay(2 * PORT_TICK_PERIOD_SECONDS);
+                        esp_restart();
                     }
                     // Lembre-se de liberar a memória alocada quando não precisar mais
                     free(received_data);

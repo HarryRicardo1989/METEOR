@@ -69,6 +69,7 @@
 #define MODEL (char *)"model"
 #define HUMIDITY (char *)"humidity"
 #define PRESSURE (char *)"pressure"
+#define ALTITUDE (char *)"altitude"
 #define DEWPOINT (char *)"dewPoint"
 #define UPDATE_STATUS (char *)"updateStatus"
 #define OTA_URL (char *)"otaUrl"
@@ -87,12 +88,6 @@
 #define BATTERY_CHARGED_STATUS (char *)"chargedStatus"
 #define BATTERY_CHARGING_STATUS (char *)"chargingStatus "
 
-/**
- * @brief NVS Models config
- *
- */
-#define DEFAULT_MODEL (char *)"METEOR_Telhado" // default model
-
 #define WAKEUP_TOUCH_TRESHOLD (char *)"wakeupTreshold" // 900
                                                        // #wake up setpoint
 
@@ -100,3 +95,9 @@
  * @brief precisa gravar todos os NVS antes de rodar
  *
  */
+
+/**
+ * @brief NVS Models config
+ *
+ */
+#define DEFAULT_MODEL (char *)"METEOR_Telhado" // default model

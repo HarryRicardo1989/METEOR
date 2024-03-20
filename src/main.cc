@@ -33,6 +33,7 @@ void app_main()
     case WAKEUP_TOUCHPAD:
         ESP_LOGW("ESP-WAKE-UP", "FROM Touch");
         // esp_init_from_touch(&touch_button);
+        esp_init_from_timer();
 
         create_sleep_timer(0);
 
